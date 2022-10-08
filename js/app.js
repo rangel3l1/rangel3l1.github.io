@@ -33,6 +33,8 @@ function startGame(){
             divbtn.style.backgroundColor='black' 
             container.style.flexDirection = 'column'
 
+          
+            createScenario()
             createCount()
             createSquares()
         }  
@@ -92,7 +94,22 @@ function menuStart(){
 
     startGame()
 
-}  
+} 
+function createScenario(){
+  const header = document.createElement('div')
+  header.id = 'header'
+  container.appendChild(header)
+  const tips = document.createElement('div')
+  const tipsTitle = document.createElement('h2')
+  tipsTitle.innerText = 'teclas do jogo'
+  const tipsImg = document.createElement('img')
+  tipsImg.setAttribute('src','../img/teclas.png')
+  tips.id = 'tips'
+  tips.appendChild(tipsTitle)
+  tips.appendChild(tipsImg)
+  header.appendChild(tips)
+
+} 
 
 function createSquares(){
 
@@ -117,9 +134,15 @@ function createSquares(){
     squares.push(square)
 
 }
-
+addFlag()
 addPLayer()
 
+}
+function addFlag(){
+  const squareArrive = document.getElementById(`d${height-1},${width-1}`)
+  const flag = document.createElement('img')
+  flag.setAttribute('src','../img/bandeira.png')
+  squareArrive.appendChild(flag)
 }
 
 function addPLayer(){
@@ -128,7 +151,7 @@ function addPLayer(){
     playerDiv.id='playerDiv'
     let playerImg = document.createElement('img')
     playerImg.setAttribute("id",'playerImg')
-    playerImg.setAttribute("src","./img/formiga.jpg")
+    playerImg.setAttribute("src","./img/formiga.png")
     playerDiv.appendChild(playerImg)
     squares[current].appendChild(playerDiv)
     addMine()
@@ -156,6 +179,7 @@ function addMine(){
     document.addEventListener("keydown",movePlayer)   
 
 }
+
 
 function movePlayer(event){
 
@@ -187,6 +211,7 @@ function moveRight(){
         isMoving=false
         current=current+1
         squares[current].appendChild(playerDiv)
+        playerDiv.style.transform = 'scaleX(1)'
         detectMines()
         addAudio()
         contador++
@@ -198,6 +223,7 @@ function moveRight(){
 function moveLeft(){
  
   if(current>0 && current%width>0  && isMoving){ 
+    playerDiv.style.transform = 'scaleX(-1)'
     isMoving=false     
     current=current-1
     squares[current].appendChild(playerDiv)  
@@ -210,6 +236,7 @@ function moveLeft(){
 }
 function moveUp(){
   if(current>width  && isMoving){
+    playerDiv.style.transform = 'rotate(-90deg)'
     isMoving=false
     current=current-width  
     squares[current].appendChild(playerDiv)
@@ -223,6 +250,7 @@ function moveUp(){
 function moveDown(){
 
   if(current<(height*width)-width  && isMoving){
+    playerDiv.style.transform = 'rotate(90deg)'
     isMoving=false 
     current=current+width
     squares[current].appendChild(playerDiv)    
@@ -299,11 +327,12 @@ function addAudio1(){
   }
 
   function createCount(){
-
+    const header = document.getElementById('header')
     let CountDiv = document.createElement('div')
     let pCount =document.createElement('p')
     pCount.id='count'
-    container.appendChild(CountDiv)
+    CountDiv.id = 'CountDiv'
+    header.appendChild(CountDiv)
     CountDiv.appendChild(pCount)
    
 
@@ -312,7 +341,8 @@ function addAudio1(){
   function addPontos(contador){ 
        
    let pCounter = document.querySelector('#count') 
-    pCounter.innerHTML=`Pontuação: ${contador}`
+
+    pCounter.innerHTML=`<h3>Pontuação: ${contador}</h3>`
    
   }
   

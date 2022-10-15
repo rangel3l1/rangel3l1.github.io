@@ -159,6 +159,7 @@ addPLayer()
 function addFlag(){
   const squareArrive = document.getElementById(`d${height-1},${width-1}`)
   const flag = document.createElement('img')
+  flag.id = 'flag'
   flag.setAttribute('src','../img/bandeira.png')
   squareArrive.appendChild(flag)
 }
@@ -289,7 +290,12 @@ function moveDown(){
 }
 
 function detectMines(){ 
+    const flag = document.getElementById('flag')
+    
+    if(current==(width*height)-1){
+      flag.style.visibility = 'hidden'
 
+    }
     if(squares[current].childNodes.length==2){
         isMoving=false      
         var element = document.getElementsByClassName('mines')
@@ -320,10 +326,11 @@ function detectMines(){
         isMoving=false
         addAudio1()
         setTimeout(()=>{ 
+       
         var pCounter = document.getElementById('count')
         var grid = document.querySelector('.grid')
         pCounter.innerHTML=`Você Ganhou com ${contador} pontos`
-        moveSaved = []
+        moveSaved = []       
         grid.style.backgroundImage='url(./img/explosao.gif)'},1500)
 
       setTimeout(()=>{    
@@ -377,7 +384,7 @@ function addAudio1(){
   }
 const verifica = (item, array) => {
    
-   !array.includes(item)&&  contador ++
+   !array.includes(item) && contador ++
 }
   function addPontos(){ 
   

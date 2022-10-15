@@ -10,40 +10,57 @@ let click=false
 menuStart()
 
 function startGame(){ 
-
-    const divbtn = document.getElementById('divbtn')  
+    contador = 0
     const btnStart = document.getElementById('btnstart')
-    const warnDiv = document.getElementById('warnDiv')
 
-    btnStart.onclick =()=>
-    {
-        if(inputName.value==''){       
-            warnDiv.style.display='block'
-            return false
-        }
-        else{
-            isMoving=true
-            contador=0      
-            container.innerHTML=''
-            container.style.borderImage='none' 
-            container.style.backgroundColor='#b1e2f2'
-            divbtn.style.borderRadius='50%'  
-            divbtn.style.margin='150px'        
-            divbtn.style.backgroundImage='url(./static/img/explosao.gif)'
-            divbtn.style.backgroundColor='black' 
-            container.style.flexDirection = 'column'
+    btnStart.onkeydown =(event)=>{
+        
+    let keyName = event.key
+    console.log(keyName)
+    
+    switch(keyName){
+        case 13:
+          createGame()
+        break
 
-          
-            createScenario()
-            createCount()
-            createSquares()
-        }  
+    }
+  }
+    (btnStart.onclick )  =()=>
+    {   
+       createGame()
     }
   
    
 }
+function createGame(){
+  const divbtn = document.getElementById('divbtn')  
+  
+  const warnDiv = document.getElementById('warnDiv')
+  if(inputName.value==''){       
+    warnDiv.style.display='block'
+    return false
+}
+else{
+    isMoving=true
+        
+    container.innerHTML=''
+    container.style.borderImage='none' 
+    container.style.backgroundColor='#b1e2f2'
+    divbtn.style.borderRadius='50%'  
+    divbtn.style.margin='150px'        
+    divbtn.style.backgroundImage='url(./static/img/explosao.gif)'
+    divbtn.style.backgroundColor='black' 
+    container.style.flexDirection = 'column'
+
+  
+    createScenario()
+    createCount()
+    createSquares()
+}  
+}
 function menuStart(){
     container.innerHTML=''
+    
     container.style.flexDirection = 'row'
     current = 0
     squares.length=0;   
@@ -68,10 +85,11 @@ function menuStart(){
     divbtn.appendChild(btnStart)     
     btnStart.id='btnstart'
     let nomePlayer = document.createElement('div')  
-    let inputName = document.createElement('input')
+    const inputName = document.createElement('input')
     let warnMessage = document.createElement('p') 
     warnMessage.id = 'warnMessage'  
-    nomePlayer.appendChild(inputName)
+    inputName.setAttribute('autofocus', true)
+    nomePlayer.appendChild(inputName)   
     divStart.appendChild(nomePlayer)
     nomePlayer.appendChild(warnMessage)
     inputName.setAttribute('type','text')
@@ -184,7 +202,10 @@ function addMine(){
 function movePlayer(event){
 
     let keyName = event.keyCode
+    
     switch(keyName){
+       
+        
         case 39:
         
         moveRight()    
@@ -212,10 +233,11 @@ function moveRight(){
         current=current+1
         squares[current].appendChild(playerDiv)
         playerDiv.style.transform = 'scaleX(1)'
+        counterIncrease()
+        addPontos() 
         detectMines()
         addAudio()
-        contador++
-        addPontos(contador) 
+      
      }
     
 }
@@ -227,23 +249,26 @@ function moveLeft(){
     isMoving=false     
     current=current-1
     squares[current].appendChild(playerDiv)  
+    counterIncrease()
+    addPontos()
     detectMines()
     addAudio()
-    contador++
-    addPontos(contador)
+
   }
 
 }
 function moveUp(){
-  if(current>width  && isMoving){
+
+  if(current>=width  && isMoving){
     playerDiv.style.transform = 'rotate(-90deg)'
     isMoving=false
     current=current-width  
     squares[current].appendChild(playerDiv)
+    counterIncrease()
+    addPontos()
     detectMines()
     addAudio()
-    contador++
-    addPontos(contador)
+ 
   }
  
 }
@@ -253,11 +278,12 @@ function moveDown(){
     playerDiv.style.transform = 'rotate(90deg)'
     isMoving=false 
     current=current+width
-    squares[current].appendChild(playerDiv)    
+    squares[current].appendChild(playerDiv)  
+    counterIncrease()
+    addPontos()  
     detectMines()
     addAudio()
-    contador++
-    addPontos(contador)
+   
   }
 
 }
@@ -276,6 +302,7 @@ function detectMines(){
 
         var pCounter = document.getElementById('count')
         pCounter.innerHTML=`Você Perdeu com ${contador} pontos`
+        moveSaved = []
         var grid = document.querySelector('.grid')
         grid.style.backgroundImage='url(./img/explosao.gif)'},1500)
 
@@ -296,6 +323,7 @@ function detectMines(){
         var pCounter = document.getElementById('count')
         var grid = document.querySelector('.grid')
         pCounter.innerHTML=`Você Ganhou com ${contador} pontos`
+        moveSaved = []
         grid.style.backgroundImage='url(./img/explosao.gif)'},1500)
 
       setTimeout(()=>{    
@@ -337,9 +365,22 @@ function addAudio1(){
    
 
   }
-
-  function addPontos(contador){ 
-       
+  let moveSaved = []
+  function counterIncrease(){
+    verifica(current, moveSaved)
+    moveSaved.push(current)
+     
+   
+    
+   
+    
+  }
+const verifica = (item, array) => {
+   
+   !array.includes(item)&&  contador ++
+}
+  function addPontos(){ 
+  
    let pCounter = document.querySelector('#count') 
 
     pCounter.innerHTML=`<h3>Pontuação: ${contador}</h3>`

@@ -12,20 +12,22 @@ menuStart()
 function startGame(){ 
     contador = 0
     const btnStart = document.getElementById('btnstart')
+    const inputName = document.getElementById('inputName')
+    inputName.onkeydown =(event)=>{
+       
+    let keyName = event.code
+    
+    
 
-    btnStart.onkeydown =(event)=>{
-        
-    let keyName = event.key
-    console.log(keyName)
     
     switch(keyName){
-        case 13:
+        case 'Enter':
           createGame()
         break
 
     }
   }
-    (btnStart.onclick )  =()=>
+    btnStart.onclick   =()=>
     {   
        createGame()
     }
